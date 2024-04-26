@@ -1,8 +1,4 @@
-<div class="card mb-3">
-    <div class="card-body">
-        <form action="" method="post">
-            <div class="row mb-3"
-            <div class="col-md-6">
+
                 <label for="invoice" class="form-label">Invoice</label>
  <input type="text" class="form-control" name="invoice">
  </div>
