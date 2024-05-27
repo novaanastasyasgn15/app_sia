@@ -25,3 +25,4 @@ $username = $_POST['username'];
  }else{
  header('location:index.php');
 }
+?>
