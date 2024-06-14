@@ -1,6 +1,6 @@
 <div class="card mb-3">
     <div class="card-body">
-        <form action="" method="post">
+        <form action="modul/pembelian/aksi_pembelian.php?act=insert" method="post">
             <div class="row mb-3">
                 <div class="col-md-4">
                     <label for="invoice" class="form-label">Invoice</label>
@@ -11,8 +11,8 @@
                     <input type="date" class="form-control" name="tanggal">
                 </div>
                 <div class="col-md-4">
-                    <label for="suplier" class="form-label">Suplier</label>
-                    <select name="suplier" class="form-select">
+                    <label for="suplier" class="form-label">Supplier</label>
+                    <select name="supplier" class="form-select">
                         <option value="1">PT Suplier Jaya</option>
                         <option value="2">CV Maju Jaya</option>
                     </select>
@@ -20,34 +20,17 @@
             </div>
             <div class="row mb-3">
                 <div class="col-md-4">
-                    <label for="jumlah" class="form-label">Jumlah</label>
-                    <input type="number" class="form-control" name="jumlah">
+                    <span class="me-auto text-gray">
+                        <?php
+                        if(isset($_SESSION['pesan'])){
+                            echo $_SESSION['pesan'];
+                            unset($_SESSION['pesan']);
+                        }
+                       ?>
+                    </span>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
+                    <button type="submit" name="submit" class="btn btn-primary">Simpan</button>
                 </div>
-                <div class="col-md-4">
-                    <label for="harga" class="form-label">Harga</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp.</span>
-                        <input type="number" class="form-control" name="harga">
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <label for="total" class="form-label">Total</label>
-                    <div class="input-group">
-                        <span class="input-group-text">Rp.</span>
-                        <input type="number" class="form-control" name="total" disabled>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <label for="keterangan" class="form-label">Keterangan</label>
-                    <textarea name="keterangan" class="form-control"></textarea>
-                </div>
-            </div>
-            <hr class="text-secondary">
-            <div class="text-end">
-                <button type="reset" class="btn btn-secondary">Reset</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
         </form>
     </div>
@@ -73,105 +56,107 @@
                     </tr>
                 </thead>
                 <tbody>
+                <?php
+                $query = "SELECT p.id_pembelian, p.invoice_pembelian, p.tgl_pembelian, s.id_supplier, s.nama_supplier, p.jumlah_pembelian, p.harga_pembelian, p.total_pembelian, p.keterangan 
+                          FROM pembelian p 
+                          INNER JOIN supplier s ON p.id_supplier = s.id_supplier";
+                $exec = mysqli_query($koneksi, $query);
+                $id = 0;
+                while($row = mysqli_fetch_array($exec)){
+                    $id++;?>
                     <tr>
-                        <td>1</td>
-                        <td>BL110324</td>
-                        <td>11/03/2024</td>
-                        <td>PT Suplier Jaya</td>
-                        <td>1</td>
-                        <td>Rp. 15.000,000,-</td>
-                        <td>Rp. 15.000.000,-</td>
-                        <td>Pembelian perlengkapan maintenance</td>
+                        <td><?= $id?></td>
+                        <td><?= $row['invoice_pembelian']?></td>
+                        <td><?= $row['tgl_pembelian']?></td>
+                        <td><?= $row['nama_supplier']?></td>
+                        <td><?= $row['jumlah_pembelian']?></td>
+                        <td><?= "Rp. ". number_format($row['harga_pembelian'], 2, ',', '.');?></td>
+                        <td><?= "Rp. ". number_format($row['total_pembelian'], 2, ',', '.');?></td>
+                        <td><?= $row['keterangan']?></td>
                         <td>
-                            <a href="#editPembelian" class="text-decoration-none" data-bs-toggle="modal">
+                            <a href="#editPembelian<?= $row['id_pembelian']?>" class="text-decoration-none" data-bs-toggle="modal">
                                 <i class="bi bi-pencil-square text-success"></i>
                             </a>
-                            <a href="" class="text-decoration-none">
-                                <i class="bi bi-trash text-danger"></i>
-                             </a>
-                            </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="editPembelian" tabindex="-1" arialabelledby="exampleModalLabel" aria-hidden="true">
-                                <form action="" method="post">
-                                    <div class="modal-dialog modal-lg">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Pembelian</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="row mb-3">\<div class="col-md-4">
-                                                    <label for="invoice" class="form-label">Invoice</label>
-                                                    <input type="text" class="form-control" name="invoice" value="BL110324" disabled>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="tanggal" class="form-label">Tanggal</label>
-                                                    <input type="date" class="form-control" name="tanggal" value="2024-11-03">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="suplier" class="form-label">Suplier</label>
-                                                    <select name="suplier" class="form-select">
-                                                        <option value="1" selected>PT Suplier Jaya</option>
-                                                        <option value="2">CV Maju Jaya</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row mb-3">
-                                                <div class="col-md-4">
-                                                    <label for="jumlah" class="form-label">Jumlah</label>
-                                                    <input type="number" class="form-control" name="jumlah" value="1">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="harga" class="form-label">Harga</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">Rp.</span>
-                                                        <input type="number" class="form-control"
-                                                        name="harga" value="15000000">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label for="total" class="form-label">Total</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">Rp.</span>
-                                                        <input type="number" class="form-control" name="total" value="15000000" disabled>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <label for="keterangan" class="form-label">Keterangan</label>
-                                                    <textarea name="keterangan" class="form-control">Pembelian perlengkapan maintenance</textarea>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>BL100324</td>
-                        <td>10/03/2024</td>
-                        <td>CV Maju Jaya</td>
-                        <td>5</td>
-                        <td>Rp. 10.000.000,-</td>
-                        <td>Rp. 50.000.000,-</td>
-                        <td>Pengadaan 5 unit laptop ASUS</td>
-                        <td>
-                            <a href="" class="text-decoration-none">
-                                <i class="bi bi-pencil-square text-success"></i>
-                            </a>
-                            <a href="" class="text-decoration-none">
+                            <a href="modul/pembelian/aksi_pembelian.php?act=delete&id=<?=$row['id_pembelian'];?>" class="text-decoration-none">
                                 <i class="bi bi-trash text-danger"></i>
                             </a>
                         </td>
                     </tr>
-                </tbody>
+                    <!-- Modal -->
+                    <div class="modal fade" id="editPembelian<?= $row['id_pembelian']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Data Pembelian</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="modul/pembelian/aksi_pembelian.php?act=update&id=<?=$row['id_pembelian'];?>" method="post">
+                            <div class="modal-body">
+                               <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="invoice" class="form-label">Invoice</label>
+                                        <input type="text" class="form-control" name="invoice" value="<?= $row['invoice_pembelian']?>" readonly>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="tanggal" class="form-label">Tanggal</label>
+                                        <input type="date" class="form-control" name="tanggal" value="<?= $row['tgl_pembelian']?>">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="suplier" class="form-label">Suplier</label>
+                                        <select name="id_suplier" class="form-select">
+                                            <?php
+                                            $q_sup = "SELECT * from supplier";
+                                            $exec_sup = mysqli_query($koneksi, $q_sup);
+                                            while($r_sup = mysqli_fetch_array($exec_sup)){
+                                              ?>
+                                                <option value="<?= $r_sup['id_supplier']?>" <?= $row['id_supplier'] === $r_sup['id_supplier']? 'elected' : '';?>>
+                                                    <?= $r_sup['nama_supplier']?>
+                                                </option>
+                                                <?php
+                                            }
+                                          ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <label for="jumlah" class="form-label">Jumlah</label>
+                                        <input type="number" class="form-control" name="jumlah" id="jumlah_edit_<?= $row['id_pembelian']?>" value="<?= $row['jumlah_pembelian']?>" oninput="hitungTotalEdit(<?= $row['id_pembelian']?>);">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="harga" class="form-label">Harga</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp.</span>
+                                            <input type="number" class="form-control" name="harga" id="harga_edit_<?= $row['id_pembelian']?>" value="<?= $row['harga_pembelian']?>" oninput="hitungTotalEdit(<?= $row['id_pembelian']?>);">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="total" class="form-label">Total</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">Rp.</span>
+                                            <input type="number" class="form-control" name="total" id="total_edit_<?= $row['id_pembelian']?>" value="<?= $row['total_pembelian']?>" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="keterangan" class="form-label">Keterangan</label>
+                                        <textarea name="keterangan" class="form-control"><?=$row['keterangan']?></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                }
+              ?>
+                </tbody>                                                
             </table>
         </div>
     </div>
