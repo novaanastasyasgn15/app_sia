@@ -11,9 +11,9 @@
                     <input type="date" class="form-control" name="tanggal">
                 </div>
                 <div class="col-md-4">
-                    <label for="suplier" class="form-label">Supplier</label>
-                    <select name="supplier" class="form-select">
-                        <option value="1">PT Suplier Jaya</option>
+                    <label for="id_suplier" class="form-label">Supplier</label>
+                    <select name="id_suplier" class="form-select">
+                        <option value="1">PT Supplier Jaya</option>
                         <option value="2">CV Maju Jaya</option>
                     </select>
                 </div>
